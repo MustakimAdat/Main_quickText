@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glowing Background</title>
+    <style>
+        body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 5px;
+    width: 100vw;
+    height: 100vh;
+}
+
+.block {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.block:hover {
+    box-shadow: 0 0 10px rgba(180, 13, 13, 0.8);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container"> hi dfsfsdf</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.container');
+    const rows = 20; // Adjust the number of rows
+    const cols = 20; // Adjust the number of columns
+
+    for (let i = 0; i < rows * cols; i++) {
+        const block = document.createElement('div');
+        block.classList.add('block');
+        container.appendChild(block);
+    }
+});
+
+    </script>
+</body>
+</html>

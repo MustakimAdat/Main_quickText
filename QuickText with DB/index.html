@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickText</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        #notepad, #enterCodePrompt {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #notepad textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+        }
+        #notepad button, #enterCodePrompt button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QuickText</h1>
+        <button onclick="showNotepad()">Create Room</button>
+        <button onclick="showEnterCode()">Enter Code</button>
+
+        <div id="notepad">
+            <h2>Notepad</h2>
+            <div id="code"></div>
+            <textarea id="textEntry" placeholder="Enter your text here"></textarea>
+            <br>
+            <button onclick="submitText()">Submit</button>
+            <button onclick="hideNotepad()">Cancel</button>
+        </div>
+
+        <div id="enterCodePrompt">
+            <h2>Enter Code</h2>
+            <input type="text" id="codeEntry" placeholder="Enter 6-digit code">
+            <br>
+            <button onclick="retrieveText()">Retrieve</button>
+            <button onclick="hideEnterCode()">Cancel</button>
+            <div id="retrievedText"></div>
+        </div>
+    </div>
+
+    <script>
+        function showNotepad() {
+            document.getElementById('notepad').style.display = 'block';
+            document.getElementById('enterCodePrompt').style.display = 'none';
+            generateUniqueCode();
+        }
+
+        function hideNotepad() {
+            document.getElementById('notepad').style.display = 'none';
+        }
+
+        function showEnterCode() {
+            document.getElementById('enterCodePrompt').style.display = 'block';
+            document.getElementById('notepad').style.display = 'none';
+        }
+
+        function hideEnterCode() {
+            document.getElementById('enterCodePrompt').style.display = 'none';
+        }
+
+        function generateUniqueCode() {
+            fetch('/generate-code')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);  // Debug print
+                if (data.code) {
+                    document.getElementById('code').innerText = `Your unique code: ${data.code}`;
+                } else {
+                    document.getElementById('code').innerText = 'Error generating code';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('code').innerText = 'Error generating code';
+            });
+        }
+
+        function submitText() {
+            const text = document.getElementById('textEntry').value;
+            fetch('/submit-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Submit response:', data);  // Debug print
+                if (data.code) {
+                    alert(`Text submitted with code: ${data.code}`);
+                    hideNotepad();
+                } else {
+                    alert('Error submitting text');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function retrieveText() {
+            const code = document.getElementById('codeEntry').value;
+            fetch(`/retrieve-text?code=${code}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Retrieve response:', data);  // Debug print
+                if (data.text) {
+                    document.getElementById('retrievedText').innerText = `Retrieved text: ${data.text}`;
+                } else {
+                    document.getElementById('retrievedText').innerText = `Error: ${data.error}`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

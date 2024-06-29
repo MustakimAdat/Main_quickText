@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick-text</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            background-color: #f2f2f2; /* Light gray background */
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+            text-align: center;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .nav{
+            width: 100%;
+            justify-content: space-between;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 8px;
+            display: flex;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: -450px; 
+            left: 0%;
+        }
+
+        .nav h1{
+            padding: 0px 30px;
+        }
+        
+        .main-text{
+            width: px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: -350px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .overlay-container {
+            background: rgba(38, 37, 37, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 700px;
+            height: 150px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 0.2px solid rgba(255, 255, 255, 0.138);
+            transform: translate(85%, -0%);
+        }
+        
+        .btn{
+            border: none;
+            margin: 20px;
+            padding: 24px;
+            width: 220px;
+            font-family: "montserrat",sans-serif;
+            text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #000000;
+            font-weight: 500;
+            background-size: 200%;
+            transition: 0.6s;
+        }
+
+        .btn2{
+            background-image: linear-gradient(to left,#C4E538,#009432,#C4E538);
+        }
+
+        .btn:hover{
+            background-position: right;
+        }
+
+        span{
+            color: #59ff12;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .confirm {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .confirm:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- <iframe src='https://my.spline.design/chips-efed785f4a208636f2828b7f5453add8/' frameborder='0'></iframe> -->
+    <video src="../Lines Digital Abstract Background.mp4" autoplay muted loop id="myVideo"></video>
+
+    <div class="overlay">
+        <div class="nav">
+            <h1>Quick- <span>Text</span></h1>
+            <h1><sup><span>By</span></sup> <u>SYPHER</u></h1>
+        </div>
+        <div class="main-text">
+            <h1>Welcome to <span><b>Quick</b></span> <i>Text.</i></h1>
+        </div>
+        <div class="overlay-container">
+            <button class="btn btn2" onclick="openModal()">Create Room</button>
+            <button class="btn btn2" onclick="openEnterCodeModal()">Enter Code</button>
+        </div>
+    </div>
+
+    <!-- Create Room Modal -->
+    <div id="createRoomModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateRoomModal()">&times;</span>
+            <h2>Notepad</h2>
+            <textarea id="notepadText" placeholder="Write your text here..."></textarea>
+            <button class="confirm" onclick="submitText()">Submit</button>
+        </div>
+    </div>
+
+    <!-- Enter Code Modal -->
+    <div id="enterCodeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEnterCodeModal()">&times;</span>
+            <h2>Enter Code</h2>
+            <input type="text" id="codeInput" placeholder="Enter 6-digit code">
+            <button class="confirm" onclick="fetchText()">Fetch</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("createRoomModal").style.display = "block";
+        }
+
+        function closeCreateRoomModal() {
+            document.getElementById("createRoomModal").style.display = "none";
+        }
+
+        function openEnterCodeModal() {
+            document.getElementById("enterCodeModal").style.display = "block";
+        }
+
+        function closeEnterCodeModal() {
+            document.getElementById("enterCodeModal").style.display = "none";
+        }
+
+        function submitText() {
+            var text = document.getElementById("notepadText").value;
+            
+            fetch('/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Text saved with code: " + data.code);
+                closeCreateRoomModal();
+            });
+        }
+
+        function fetchText() {
+            var code = document.getElementById("codeInput").value;
+            
+            fetch('/fetch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert("Fetched text: " + data.text);
+                }
+                closeEnterCodeModal();
+            });
+        }
+    </script>
+</body>
+</html>
